@@ -1,8 +1,10 @@
-package com.chat.messenger;
+package com.chat.messenger.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.chat.messenger.R;
 
 public class MainActivity extends AppCompatActivity {
 
