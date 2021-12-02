@@ -1,11 +1,5 @@
 package com.chat.messenger.activities;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +11,12 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
-import com.chat.messenger.R;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.chat.messenger.adapters.ChatAdapter;
 import com.chat.messenger.databinding.ActivityChatBinding;
 import com.chat.messenger.models.ChatMessage;
@@ -77,8 +76,8 @@ public class Chat extends AppCompatActivity {
         loadReceiveDetails();
         init();
         listenMessages();
+        selectImageListener();
     }
-
 
     private void init() {
         preferenceManager = new PreferenceManager(getApplicationContext());
@@ -150,6 +149,8 @@ public class Chat extends AppCompatActivity {
             }
         }
         binding.inputMessage.setText(null);
+        binding.imgMsg.setVisibility(View.INVISIBLE);
+        binding.inputMessage.setVisibility(View.VISIBLE);
 
     }
 
@@ -301,7 +302,6 @@ public class Chat extends AppCompatActivity {
                 .addOnSuccessListener(documentReference -> conversionId = documentReference.getId());
     }
 
-
     private void updateConversion(String message) {
         DocumentReference documentReference =
                 database.collection(Constants.KEY_COLLECTION_CONVERSATIONS).document(conversionId);
@@ -340,6 +340,50 @@ public class Chat extends AppCompatActivity {
         }
     };
 
+    private void selectImageListener() {
+        binding.layoutattch.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            pickImage.launch(intent);
+        });
+
+
+
+    };
+
+
+    private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    if (result.getData() != null) {
+                        Uri imageUri = result.getData().getData();
+                        try {
+                            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                            encodedChatImage = encodedChatImage(bitmap);
+                            binding.imgMsg.setImageBitmap(bitmap);
+                            binding.imgMsg.setVisibility(View.VISIBLE);
+                            binding.inputMessage.setVisibility(View.INVISIBLE);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+    );
+
+
+    public String encodedChatImage(Bitmap bitmap) {
+        int previewWidth = 150;
+        int previewHight = bitmap.getHeight() * previewWidth / bitmap.getHeight();
+        Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWidth, previewHight, false);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
+
+    }
 
 
     @Override

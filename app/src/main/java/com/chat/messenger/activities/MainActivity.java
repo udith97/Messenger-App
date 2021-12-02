@@ -1,7 +1,5 @@
 package com.chat.messenger.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +7,8 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.chat.messenger.R;
 import com.chat.messenger.adapters.RecentConversionAdapter;
@@ -20,7 +20,6 @@ import com.chat.messenger.utilities.Constants;
 import com.chat.messenger.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;

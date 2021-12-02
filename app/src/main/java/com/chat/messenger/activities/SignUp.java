@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +20,6 @@ import com.chat.messenger.utilities.Constants;
 import com.chat.messenger.utilities.PreferenceManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -99,7 +97,6 @@ public class SignUp extends AppCompatActivity {
         previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
         byte[] bytes = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(bytes, Base64.DEFAULT);
-
     }
 
     private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
