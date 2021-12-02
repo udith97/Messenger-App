@@ -79,16 +79,6 @@ public class Chat extends AppCompatActivity {
         listenMessages();
     }
 
-    public String encodedChatImage(Bitmap bitmap) {
-        int previewWidth = 150;
-        int previewHight = bitmap.getHeight() * previewWidth / bitmap.getHeight();
-        Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWidth, previewHight, false);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(bytes, Base64.DEFAULT);
-
-    }
 
     private void init() {
         preferenceManager = new PreferenceManager(getApplicationContext());
@@ -296,6 +286,8 @@ public class Chat extends AppCompatActivity {
 
     private void setListeners() {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
+        binding.layoutSend.setOnClickListener(v -> sendMessage());
+
     }
 
     private String getReadableDateTime(Date date) {

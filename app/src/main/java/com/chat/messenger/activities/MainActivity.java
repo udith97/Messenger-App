@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements ConversationListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
         init();
         loadUserDetails();
@@ -63,10 +64,10 @@ public class MainActivity extends AppCompatActivity implements ConversationListe
 
     private void setListeners() {
         binding.imageSignOut.setOnClickListener(v -> signOut());
-        binding.fabnewChat.setOnClickListener(V -> {
-            startActivity(new Intent(getApplicationContext(), Users.class));
-        });
+        binding.fabnewChat.setOnClickListener(v ->
+                startActivity(new Intent(getApplicationContext(), Users.class)));
     }
+
     private void loadUserDetails() {
         binding.textName.setText(preferenceManager.getString(Constants.KEY_NAME));
         byte[] bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE), Base64.DEFAULT);
